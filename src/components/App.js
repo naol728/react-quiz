@@ -6,13 +6,14 @@ import Loader from './Loader'
 import Error from './Error'
 import StartScreen from './StartScreen';
 import Question from './Question';
-
+import NextButton from './NextButton';
 const initalstate={
  quations:[],
 //   'loading' 'ready' 'active' 'error'
  status:'loading',
  index:0,
-
+ answer:null,
+ pointes:0,
 }
 function reducer (state,action){
 switch(action.type){
@@ -27,7 +28,20 @@ switch(action.type){
       ...state,
       status:"active"
     }
-    case "error":
+  case "newanswer":
+    const question=state.quations.at(state.index);
+      return{
+        ...state,
+        answer:action.payload,
+        pointes:action.payload===question.correctOption ? state.pointes+question.points: state.pointese,
+      }
+  case 'nextquestion':
+    return {
+      ...state,
+      index:state.index+1,
+      answer:null
+    }
+  case "error":
       return {
         ...state,
         status:"error"
@@ -37,7 +51,7 @@ switch(action.type){
 }
 }
 function App() {
-   const [{quations,status,index},dispach]=useReducer(reducer,initalstate);
+   const [{quations,status,index,answer},dispach]=useReducer(reducer,initalstate);
    const numquations=quations.length;
   useEffect(
     function (){
@@ -64,7 +78,12 @@ function App() {
          {status==="loading" && <Loader />}
          {status==="error" && <Error />}
          {status==="ready" && <StartScreen numquations={numquations} dispach={dispach}/>}
-         {status==="active" && <Question quations={quations[index]}/>}
+         {status==="active" && 
+         <>
+         <Question quations={quations[index]} answer={answer} dispach={dispach}/>
+         <NextButton dispach={dispach}  answer={answer}/>
+         </>
+         }
       </Main>
     </div>
   );
