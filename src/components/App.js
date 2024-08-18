@@ -7,6 +7,7 @@ import Error from './Error'
 import StartScreen from './StartScreen';
 import Question from './Question';
 import NextButton from './NextButton';
+import Progress from './Progress';
 const initalstate={
  quations:[],
 //   'loading' 'ready' 'active' 'error'
@@ -33,7 +34,7 @@ switch(action.type){
       return{
         ...state,
         answer:action.payload,
-        pointes:action.payload===question.correctOption ? state.pointes+question.points: state.pointese,
+        pointes:action.payload===question.correctOption ? state.pointes+question.points: state.pointes,
       }
   case 'nextquestion':
     return {
@@ -51,8 +52,9 @@ switch(action.type){
 }
 }
 function App() {
-   const [{quations,status,index,answer},dispach]=useReducer(reducer,initalstate);
+   const [{quations,status,index,answer,pointes},dispach]=useReducer(reducer,initalstate);
    const numquations=quations.length;
+   const maxpointes=quations.reduce((prev,cur)=> prev+cur.points,0)
   useEffect(
     function (){
       
@@ -80,8 +82,9 @@ function App() {
          {status==="ready" && <StartScreen numquations={numquations} dispach={dispach}/>}
          {status==="active" && 
          <>
+         <Progress index={index} numquations={numquations} pointes={pointes} maxpointes={maxpointes} answer={answer} />
          <Question quations={quations[index]} answer={answer} dispach={dispach}/>
-         <NextButton dispach={dispach}  answer={answer}/>
+         <NextButton dispach={dispach}  answer={answer}  />
          </>
          }
       </Main>
