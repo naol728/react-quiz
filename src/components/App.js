@@ -5,32 +5,40 @@ import Main from './Main'
 import Loader from './Loader'
 import Error from './Error'
 import StartScreen from './StartScreen';
+import Question from './Question';
 
 const initalstate={
  quations:[],
 //   'loading' 'ready' 'active' 'error'
- status:'loading'
+ status:'loading',
+ index:0,
 
 }
 function reducer (state,action){
 switch(action.type){
-  case 'dataRecived':
+  case "dataRecived":
     return {
       ...state,
        quations:action.payload,
        status:"ready"
     }
-    case 'error':
+  case "start":
+    return{
+      ...state,
+      status:"active"
+    }
+    case "error":
       return {
         ...state,
-        status:'error'
+        status:"error"
       }
   default :
    throw new Error("Action unkown")
 }
 }
 function App() {
-   const [{status ,quations},dispach]=useReducer(reducer,initalstate);
+   const [{quations,status,index},dispach]=useReducer(reducer,initalstate);
+   const numquations=quations.length;
   useEffect(
     function (){
       
@@ -55,7 +63,8 @@ function App() {
       <Main>
          {status==="loading" && <Loader />}
          {status==="error" && <Error />}
-         {status==="ready" && <StartScreen />}
+         {status==="ready" && <StartScreen numquations={numquations} dispach={dispach}/>}
+         {status==="active" && <Question quations={quations[index]}/>}
       </Main>
     </div>
   );
