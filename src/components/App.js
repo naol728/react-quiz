@@ -8,6 +8,7 @@ import StartScreen from './StartScreen';
 import Question from './Question';
 import NextButton from './NextButton';
 import Progress from './Progress';
+import Finishscreen from './Finishscreen';
 const initalstate={
  quations:[],
 //   'loading' 'ready' 'active' 'error'
@@ -42,6 +43,8 @@ switch(action.type){
       index:state.index+1,
       answer:null
     }
+  case "finished":
+    return {}
   case "error":
       return {
         ...state,
@@ -82,11 +85,12 @@ function App() {
          {status==="ready" && <StartScreen numquations={numquations} dispach={dispach}/>}
          {status==="active" && 
          <>
-         <Progress index={index} numquations={numquations} pointes={pointes} maxpointes={numquations} answer={answer} />
+         <Progress index={index} numquations={numquations} pointes={pointes} maxpointes={maxpointes} answer={answer} />
          <Question quations={quations[index]} answer={answer} dispach={dispach}/>
          <NextButton dispach={dispach}  answer={answer}  />
          </>
          }
+         {status==="finished" && <Finishscreen pointes={pointes}  maxpointes={maxpointes}  />}
       </Main>
     </div>
   );
