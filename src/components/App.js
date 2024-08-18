@@ -82,7 +82,7 @@ function App() {
          {status==="ready" && <StartScreen numquations={numquations} dispach={dispach}/>}
          {status==="active" && 
          <>
-         <Progress index={index} numquations={numquations} pointes={pointes} maxpointes={maxpointes} answer={answer} />
+         <Progress index={index} numquations={numquations} pointes={pointes} maxpointes={numquations} answer={answer} />
          <Question quations={quations[index]} answer={answer} dispach={dispach}/>
          <NextButton dispach={dispach}  answer={answer}  />
          </>
