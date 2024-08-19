@@ -44,12 +44,22 @@ switch(action.type){
       answer:null
     }
   case "finished":
-    return {}
+    return {
+      ...state,
+      status:"finished"
+    }
   case "error":
       return {
         ...state,
         status:"error"
       }
+  case "reset":
+    return {
+      ...initalstate,
+      status:'ready',
+      quations:state.quations
+      
+    }
   default :
    throw new Error("Action unkown")
 }
@@ -87,10 +97,10 @@ function App() {
          <>
          <Progress index={index} numquations={numquations} pointes={pointes} maxpointes={maxpointes} answer={answer} />
          <Question quations={quations[index]} answer={answer} dispach={dispach}/>
-         <NextButton dispach={dispach}  answer={answer}  />
+         <NextButton dispach={dispach}  answer={answer} numquations={numquations}  index={index}/>
          </>
          }
-         {status==="finished" && <Finishscreen pointes={pointes}  maxpointes={maxpointes}  />}
+         {status==="finished" && <Finishscreen pointes={pointes}  maxpointes={maxpointes} dispach={dispach} />}
       </Main>
     </div>
   );
