@@ -18,7 +18,9 @@ const initalstate={
  index:0,
  answer:null,
  pointes:0,
+ secondsRemaining: null,
 }
+const SECS_PER_QUESTION = 30;
 function reducer (state,action){
 switch(action.type){
   case "dataRecived":
@@ -30,7 +32,8 @@ switch(action.type){
   case "start":
     return{
       ...state,
-      status:"active"
+      status:"active",
+      secondsRemaining: state.quations.length * SECS_PER_QUESTION,
     }
   case "newanswer":
     const question=state.quations.at(state.index);
@@ -62,12 +65,18 @@ switch(action.type){
       quations:state.quations
       
     }
+   case "tick":
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "finished" : state.status,
+      };
   default :
    throw new Error("Action unkown")
 }
 }
 function App() {
-   const [{quations,status,index,answer,pointes},dispach]=useReducer(reducer,initalstate);
+   const [{quations,status,index,answer,pointes,secondsRemaining},dispach]=useReducer(reducer,initalstate);
    const numquations=quations.length;
    const maxpointes=quations.reduce((prev,cur)=> prev+cur.points,0)
   useEffect(
@@ -101,7 +110,7 @@ function App() {
 
          <Footer >
          <Question quations={quations[index]} answer={answer} dispach={dispach}/>
-         <Timer />
+         <Timer dispach={dispach} secondsRemaining={secondsRemaining} />
          <NextButton dispach={dispach}  answer={answer} numquations={numquations}  index={index}/>
 
          </Footer>
