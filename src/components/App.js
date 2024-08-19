@@ -9,6 +9,8 @@ import Question from './Question';
 import NextButton from './NextButton';
 import Progress from './Progress';
 import Finishscreen from './Finishscreen';
+import Footer from './Footer';
+import Timer from './Timer';
 const initalstate={
  quations:[],
 //   'loading' 'ready' 'active' 'error'
@@ -96,8 +98,13 @@ function App() {
          {status==="active" && 
          <>
          <Progress index={index} numquations={numquations} pointes={pointes} maxpointes={maxpointes} answer={answer} />
+
+         <Footer >
          <Question quations={quations[index]} answer={answer} dispach={dispach}/>
+         <Timer />
          <NextButton dispach={dispach}  answer={answer} numquations={numquations}  index={index}/>
+
+         </Footer>
          </>
          }
          {status==="finished" && <Finishscreen pointes={pointes}  maxpointes={maxpointes} dispach={dispach} />}
